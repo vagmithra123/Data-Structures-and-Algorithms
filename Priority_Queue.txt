@@ -1,0 +1,56 @@
+What is a Priority Queue?
+
+A queue has FIFO (first-in-first-out) ordering where items are taken out or accessed on a first-come-first-served basis. Examples of queues include a queue at a movie ticket stand, as shown in the illustration above. But, what is a priority queue?
+A priority queue is an abstract data structure (a data structure defined by its behaviour) that is like a normal queue but where each item has a special “key” to quantify its “priority”. For example, if the movie cinema decides to serve loyal customers first, it will order them by their loyalty (points or number of tickets purchased). In such a case, the queue for tickets will no longer be first-come-first-served, but most-loyal-first-served. The customers will be the “items” of this priority queue while the “priority” or “key” will be their loyalty.
+Another example is of airlines that give luggage on the conveyer belt based on the status or ticket class of the passengers. Baggage tagged with “priority” or “business” or “first-class” usually arrives earlier than other non-tagged baggage.
+
+Implementing Priority Queues in Python
+
+Consider that we want to have a priority queue of customers based on their loyalty points. The higher the points, the more the priority. When it comes to implementing Priority Queues in Python, there are a number of options. We will explore three of them here.
+Using a list
+
+A very simple and straightforward way is to use the normal list but sort it every time an item is added. Here’s an example:
+customers = []
+customers.append((2, "Harry")) #no sort needed here because 1 item. 
+customers.append((3, "Charles"))
+customers.sort(reverse=True) 
+#Need to sort to maintain order
+customers.append((1, "Riya"))
+customers.sort(reverse=True) 
+#Need to sort to maintain order
+customers.append((4, "Stacy"))
+customers.sort(reverse=True)
+while customers:
+     print(customers.pop(0))
+#Will print names in the order: Stacy, Charles, Harry, Riya. 
+However, it takes O(n log n) time to maintain the order when an item is added to the list. Thus, it is only efficient when we have to make few insertions.
+
+
+2. Using heapq
+
+We can also use the heapq module in Python to implement our priority queue. This implementation has O(log n) time for insertion and extraction of the smallest element. Note that heapq only has a min heap implementation, but there are ways to use as a max heap (not covered in this article).
+Here’s an example:
+import heapq
+customers = []
+heapq.heappush(customers, (2, "Harry"))
+heapq.heappush(customers, (3, "Charles"))
+heapq.heappush(customers, (1, "Riya"))
+heapq.heappush(customers, (4, "Stacy"))
+while customers:
+     print(heapq.heappop(q))
+#Will print names in the order: Riya, Harry, Charles, Stacy.
+
+
+3. Using queue.PriorityQueue
+
+The PriorityQueue uses the same heapq implementation from 2) internally and thus has the same time complexity. However, it is different in two key ways. Firstly, it is synchronized, so it supports concurrent processes (you can read more about here). Secondly, it is a class interface instead of the function based interface of heapq . Thus, PriorityQueue is the classic OOP style of implementing and using Priority Queues.
+Let’s construct a priority queue for our movie buffs:
+from queue import PriorityQueue
+customers = PriorityQueue() #we initialise the PQ class instead of using a function to operate upon a list. 
+customers.put((2, "Harry"))
+customers.put((3, "Charles"))
+customers.put((1, "Riya"))
+customers.put((4, "Stacy"))
+while customers:
+     print(customers.get())
+#Will print names in the order: Riya, Harry, Charles, Stacy.
